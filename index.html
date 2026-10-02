@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tool Matchmaker — Find Your Perfect Free AI Tool | Tomorrow's Tech</title>
+<meta name="description" content="Answer 5 quick questions and get matched with the exact free AI tool for your task. Built for beginners. No signup, no cost.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230A1F3C'/><text x='50' y='68' font-size='52' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%232878DC'>M</text></svg>">
+<style>
+  :root{--bg1:#0A1F3C;--bg2:#142B50;--acc:#2878DC;--mut:#AAB3E6;--white:#F5F8FF}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);min-height:100vh;color:var(--white)}
+  .wrap{max-width:720px;margin:0 auto;padding:40px 20px 40px}
+  header{text-align:center;margin-bottom:32px}
+  .badge{display:inline-block;background:var(--acc);color:var(--white);font-weight:700;font-size:13px;letter-spacing:2px;padding:8px 18px;border-radius:6px;text-transform:uppercase;margin-bottom:18px}
+  h1{font-size:clamp(30px,5.5vw,44px);line-height:1.15;font-weight:800}
+  h1 span{color:var(--acc)}
+  .sub{color:var(--mut);font-size:16.5px;margin-top:12px;line-height:1.5}
+  .card{background:rgba(40,120,220,0.06);border:2px solid rgba(40,120,220,0.35);border-radius:16px;padding:30px 26px}
+  .qcount{color:var(--mut);font-size:13.5px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:600}
+  h2.q{font-size:clamp(21px,3.5vw,26px);margin-bottom:20px;line-height:1.3}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:480px){.opts{grid-template-columns:1fr}}
+  .opt{background:rgba(10,31,60,0.5);border:2px solid rgba(40,120,220,0.3);border-radius:10px;padding:15px 14px;font-size:15px;font-weight:600;color:var(--white);text-align:left;cursor:pointer;transition:all .15s ease;line-height:1.35}
+  .opt:hover{border-color:var(--acc);background:rgba(40,120,220,0.15);transform:translateY(-2px)}
+  .progress{height:6px;background:rgba(40,120,220,0.15);border-radius:3px;margin-bottom:22px;overflow:hidden}
+  .pbar{height:100%;background:var(--acc);border-radius:3px;transition:width .3s ease}
+  .back{background:none;border:none;color:var(--mut);font-size:14px;font-weight:600;cursor:pointer;margin-top:18px;padding:0}
+  .back:hover{color:var(--white)}
+  .result{background:rgba(10,31,60,0.55);border:2px solid var(--acc);border-radius:14px;padding:22px 20px;margin-bottom:14px}
+  .rank{display:inline-block;background:var(--acc);color:var(--white);font-size:11px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:5px;text-transform:uppercase;margin-bottom:10px}
+  .result h3{font-size:21px;margin-bottom:6px}
+  .why{color:var(--mut);font-size:14.5px;line-height:1.55;margin-bottom:14px}
+  .result a{display:block;text-align:center;background:var(--acc);color:var(--white);font-weight:700;font-size:15px;text-decoration:none;padding:11px;border-radius:8px;transition:filter .15s ease}
+  .result a:hover{filter:brightness(1.15)}
+  .matchscore{color:var(--mut);font-size:12.5px;margin-top:10px;text-align:center}
+  .again{display:block;width:100%;background:none;border:2px solid var(--acc);color:var(--white);font-weight:700;font-size:15px;padding:13px;border-radius:8px;cursor:pointer;margin-top:22px;transition:background .15s ease}
+  .again:hover{background:rgba(40,120,220,0.15)}
+  .tagline{text-align:center;color:var(--mut);font-size:14.5px;margin-top:26px;line-height:1.6}
+  .tagline a{color:var(--acc);font-weight:600;text-decoration:none}
+  footer{text-align:center;margin-top:34px;padding-top:22px;border-top:1px solid rgba(170,179,230,0.2)}
+  footer p{color:var(--mut);font-size:13.5px}
+  footer .gfc{color:var(--white);font-weight:600;margin-bottom:4px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="badge">Tomorrow's Tech</div>
+    <h1>AI Tool <span>Matchmaker</span></h1>
+    <p class="sub">Answer 5 quick questions. Get matched with the exact free AI tool for what you're trying to do. No signup, no cost.</p>
+  </header>
+
+  <div class="card" id="app"></div>
+
+  <p class="tagline">Want more? Browse <a href="https://tomorrow-s-tech-free-tools.vercel.app/" target="_blank" rel="noopener">50+ free AI tools</a> or grab <a href="https://tomorrows-tech-prompt-pack.vercel.app/" target="_blank" rel="noopener">72 free work prompts</a>.<br>Follow <a href="https://www.facebook.com/1210214495499052" target="_blank" rel="noopener">@TomorrowsTech</a> — a new free tool every Friday.</p>
+
+  <footer>
+    <p class="gfc">Produced by GFC Consulting Group</p>
+    <p>Smart Solutions. Better Tomorrow.</p>
+  </footer>
+</div>
+
+<script>
+const TOOLS = [
+  {n:"ChatGPT", u:"https://chatgpt.com/", c:["write","research","brainstorm","code","analyze","learn"], s:1, e:1, d:"either", str:["fast","easy","powerful"], b:"The all-rounder. Writes, brainstorms, explains anything, searches the web, and analyzes files — all free."},
+  {n:"Claude", u:"https://claude.ai/", c:["write","research","brainstorm","analyze","code","longform"], s:1, e:1, d:"either", str:["powerful","easy"], b:"Exceptional writing quality and reasoning. Great for long documents, careful analysis, and natural-sounding text."},
+  {n:"Google Gemini", u:"https://gemini.google.com/", c:["write","research","brainstorm","images","analyze"], s:1, e:1, d:"either", str:["fast","easy","powerful"], b:"Google's AI assistant. Strong at research, integrates with Google apps, and handles images and long context well."},
+  {n:"NotebookLM", prim:"research", u:"https://notebooklm.google.com/", c:["research","learn","summarize","analyze"], s:1, e:2, d:"either", str:["powerful"], b:"Upload up to 50 sources and ask questions across all of them. Every answer cites your sources, and it turns them into audio overviews."},
+  {n:"Perplexity", prim:"research", u:"https://www.perplexity.ai/", c:["research","learn","summarize"], s:1, e:1, d:"either", str:["fast"], b:"A search engine that answers with sources. Built for looking things up and getting cited, up-to-date answers fast."},
+  {n:"Canva", prim:"present", u:"https://www.canva.com/", c:["design","images","present","social"], s:1, e:1, d:"either", str:["easy"], b:"Design anything — posts, presentations, flyers — with AI image generation and Magic Design built in. Generous free tier."},
+  {n:"Ideogram", prim:"images", u:"https://ideogram.ai/", c:["images","design"], s:1, e:1, d:"either", str:["easy"], b:"Free AI image generation that's especially good at rendering readable text inside images — logos, posters, cards."},
+  {n:"Microsoft Designer", prim:"images", u:"https://designer.microsoft.com/", c:["images","design","social"], s:1, e:1, d:"either", str:["easy","fast"], b:"Type a description, get polished graphics and social posts instantly. Free with a Microsoft account."},
+  {n:"CapCut", prim:"video", u:"https://www.capcut.com/", c:["video","edit","social"], s:1, e:2, d:"either", str:["powerful","easy"], b:"Full video editor with AI captions, effects, and templates — the same tool behind most viral reels. Free."},
+  {n:"Clipchamp", prim:"video", u:"https://clipchamp.com/", c:["video","edit"], s:1, e:1, d:"computer", str:["easy"], b:"Simple browser-based video editing with AI voiceovers and auto-captions. Free with a Microsoft account."},
+  {n:"Suno", prim:"audio", u:"https://suno.com/", c:["music","audio"], s:1, e:1, d:"either", str:["easy","fun"], b:"Describe any song and AI writes and sings it — full tracks with vocals, free to create daily."},
+  {n:"ElevenLabs", prim:"audio", u:"https://elevenlabs.io/", c:["audio","voice"], s:2, e:1, d:"computer", str:["powerful"], b:"The most realistic AI text-to-speech voices. Free tier includes commercial use and multiple voices."},
+  {n:"Edge TTS (via Clipchamp/Word)", u:"https://www.microsoft.com/en-us/microsoft-365/microsoft-copilot", c:["audio","voice","freeforever"], s:1, e:1, d:"computer", str:["fast","easy"], b:"Natural neural voices built into Microsoft tools — free, unlimited text-to-speech right inside Word and Clipchamp."},
+  {n:"GitHub Copilot", prim:"code", u:"https://github.com/features/copilot", c:["code"], s:2, e:2, d:"computer", str:["powerful"], b:"AI pair programmer that autocompletes code in your editor. Free tier for everyone; free Pro for students."},
+  {n:"Replit", prim:"code", u:"https://replit.com/", c:["code","website"], s:1, e:2, d:"either", str:["easy","powerful"], b:"Build and run apps in your browser with an AI helper that writes code alongside you. No setup needed."},
+  {n:"v0 by Vercel", prim:"code", u:"https://v0.dev/", c:["website","code","design"], s:2, e:2, d:"computer", str:["powerful","fast"], b:"Describe a website and get working code you can deploy in one click. Free tier included."},
+  {n:"Gamma", prim:"present", u:"https://gamma.app/", c:["present","design","write"], s:1, e:1, d:"either", str:["fast","easy"], b:"Type a topic, get a full designed presentation or document in minutes. Free tier for several decks a month."},
+  {n:"Beautiful.ai", prim:"present", u:"https://www.beautiful.ai/", c:["present"], s:1, e:1, d:"computer", str:["easy"], b:"Presentations that design themselves — layouts auto-adjust as you add content. Free to start."},
+  {n:"Zapier", prim:"automate", u:"https://zapier.com/", c:["automate","productivity"], s:2, e:2, d:"computer", str:["powerful"], b:"Connect your apps and automate repetitive work — 100 free tasks a month, no code required."},
+  {n:"Notion", prim:"organize", u:"https://www.notion.com/", c:["organize","write","productivity"], s:1, e:2, d:"either", str:["easy","powerful"], b:"Notes, tasks, and docs in one place with AI writing and search built in. Free personal plan."},
+  {n:"Todoist", prim:"organize", u:"https://todoist.com/", c:["organize","productivity"], s:1, e:1, d:"either", str:["easy","fast"], b:"The simplest way to capture and track tasks, with natural-language input and free reminders."},
+  {n:"Google AI Studio", prim:"learn", u:"https://aistudio.google.com/", c:["learn","code","images","brainstorm"], s:2, e:2, d:"computer", str:["powerful","freeforever"], b:"A free playground for Google's most capable models — test prompts, generate images, and build with the API."},
+  {n:"Hugging Face", u:"https://huggingface.co/", c:["learn","images"], s:3, e:3, d:"computer", str:["powerful","freeforever"], b:"Thousands of free open AI models and Spaces you can try right in the browser. The home of open-source AI."},
+  {n:"Otter.ai", prim:"meetings", u:"https://otter.ai/", c:["meetings","transcribe","productivity"], s:1, e:1, d:"either", str:["fast","easy"], b:"Records meetings and turns speech into searchable transcripts with AI summaries. Free tier included."},
+  {n:"Adobe Express", prim:"images", u:"https://www.adobe.com/express/", c:["design","images","social"], s:1, e:1, d:"either", str:["easy","fast"], b:"Quick graphics, flyers, and photo edits in the browser with AI generation — free tier available."},
+  {n:"Remove.bg", u:"https://www.remove.bg/", c:["images","photos"], s:1, e:1, d:"either", str:["fast","easy"], b:"Erase any photo background in one click. Free full-res previews and free edits for small images."},
+  {n:"Luma Dream Machine", u:"https://lumalabs.ai/dream-machine", c:["video","images"], s:2, e:2, d:"either", str:["powerful"], b:"Turns text and images into short AI video clips. Free monthly generations to start."},
+  {n:"Runway", u:"https://runwayml.com/", c:["video","images","edit"], s:2, e:2, d:"computer", str:["powerful"], b:"Pro-grade AI video tools — text to video, background removal, and more. One-time free credits."},
+  {n:"DeepL", u:"https://www.deepl.com/", c:["translate","write"], s:1, e:1, d:"either", str:["fast","easy"], b:"The most accurate free translator for documents and text — noticeably better than typical machine translation."},
+  {n:"Google Translate", u:"https://translate.google.com/", c:["translate"], s:1, e:1, d:"either", str:["fast","easy","freeforever"], b:"Instant translation across 100+ languages, including live camera and conversation modes on mobile."},
+  {n:"Copy.ai", u:"https://www.copy.ai/", c:["write","marketing","brainstorm"], s:1, e:1, d:"either", str:["fast"], b:"AI writing tool with ready templates for emails, ads, and social captions. Free monthly words."},
+  {n:"Grammarly", u:"https://www.grammarly.com/", c:["write","edit"], s:1, e:1, d:"either", str:["easy","fast"], b:"Fixes grammar and sharpens tone everywhere you type — free browser extension included."},
+  {n:"QuillBot", u:"https://quillbot.com/", c:["write","edit","summarize"], s:1, e:1, d:"either", str:["fast","easy"], b:"Paraphrase, summarize, and check grammar instantly. Solid free tier for everyday writing."},
+  {n:"Kimi", u:"https://kimi.moonshot.ai/", c:["research","longform","summarize"], s:1, e:1, d:"either", str:["powerful"], b:"Reads very long documents and whole websites, then answers questions about them. Free."},
+  {n:"Bing / Copilot", u:"https://copilot.microsoft.com/", c:["research","images","learn","brainstorm"], s:1, e:1, d:"either", str:["fast","easy","freeforever"], b:"Microsoft's free AI chat with web search and image generation built in — no waitlist, no cost."},
+  {n:"Leonardo.ai", u:"https://leonardo.ai/", c:["images","design"], s:2, e:1, d:"either", str:["powerful"], b:"Daily free credits for high-quality AI image generation with fine control over styles."},
+  {n:"Sheets / Excel AI", prim:"data", u:"https://www.microsoft.com/en-us/microsoft-365/microsoft-copilot-for-microsoft-365", c:["analyze","data"], s:2, e:1, d:"computer", str:["easy","fast"], b:"Copilot in Excel and Google Sheets' AI features clean data and write formulas for you — describe what you want in plain English."}
+];
+
+const QUESTIONS = [
+  {k:"c", q:"What do you want to do?", opts:[
+    ["write","Write or improve something"],
+    ["research","Research a topic"],
+    ["images","Create images or graphics"],
+    ["video","Make or edit video"],
+    ["organize","Get organized"],
+    ["automate","Automate boring tasks"],
+    ["learn","Learn about AI"],
+    ["code","Build an app or code"],
+    ["audio","Voice or music"],
+    ["meetings","Handle meetings"],
+    ["present","Make a presentation"],
+    ["data","Work with data"]
+  ]},
+  {k:"s", q:"How comfortable are you with tech?", opts:[
+    [1,"Beginner — keep it simple"],
+    [2,"Comfortable — I can click around"],
+    [3,"Advanced — give me power tools"]
+  ]},
+  {k:"e", q:"How much time do you have?", opts:[
+    [1,"2 minutes — instant results"],
+    [2,"15 minutes to explore"],
+    [3,"As long as it takes to learn properly"]
+  ]},
+  {k:"d", q:"What are you on?", opts:[
+    ["phone","Just my phone"],
+    ["computer","A computer"],
+    ["either","Either one"]
+  ]},
+  {k:"str", q:"What matters most to you?", opts:[
+    ["fast","Speed — fastest result"],
+    ["easy","Ease — simplest to use"],
+    ["powerful","Power — best quality possible"]
+  ]}
+];
+
+let answers = {}, step = 0;
+
+function start(){
+  answers = {}; step = 0; render();
+}
+
+function render(){
+  const app = document.getElementById('app');
+  if(step < QUESTIONS.length){
+    const q = QUESTIONS[step];
+    const pct = Math.round((step / QUESTIONS.length) * 100);
+    app.innerHTML = `
+      <div class="progress"><div class="pbar" style="width:${pct}%"></div></div>
+      <div class="qcount">Question ${step+1} of ${QUESTIONS.length}</div>
+      <h2 class="q">${q.q}</h2>
+      <div class="opts">${q.opts.map(o =>
+        `<button class="opt" onclick="answer(${step},'${q.k}',${typeof o[1]==='number' ? `'${o[1]}'` : `'${o[1]}'`},${typeof o[0]==='number'?o[0]:`'${o[0]}'`})">${o[1]}</button>`).join('')}
+      </div>
+      ${step>0?'<button class="back" onclick="back()">← Back</button>':''}`;
+  } else {
+    showResults(app);
+  }
+}
+
+function answer(i, k, _lbl, v){ answers[k]=v; step++; render(); }
+function back(){ step--; const k=QUESTIONS[step].k; delete answers[k]; render(); }
+
+function score(t){
+  let sc = 0;
+  if(t.c.includes(answers.c)) sc += 50;
+  if(t.prim===answers.c) sc += 14;
+  if(t.c.includes(answers.c)) sc += (t.str.includes(answers.str)?15:0);
+  if(t.s <= (answers.s==="3"?3:answers.s)) sc += 10; else sc -= 8;
+  if(answers.s==="3" && t.s===3) sc += 6;
+  if(t.e <= (answers.e==="3"?3:answers.e)) sc += 8; else sc -= 5;
+  if(answers.d!=="either" && t.d!=="either" && t.d!==answers.d) sc -= 25;
+  if(answers.d==="phone" && t.d==="phone") sc += 5;
+  if(t.str.includes(answers.str)) sc += 12;
+  if(t.n.includes("TTS") && answers.c!=="audio") sc -= 60;
+  if(t.c.includes("freeforever")) sc += 2;
+  return sc;
+}
+
+function showResults(app){
+  const ranked = TOOLS.map(t=>({t, sc:score(t)})).sort((a,b)=>b.sc-a.sc).slice(0,3);
+  const max = ranked[0].sc;
+  const labels = ["Perfect Match","Great Fit","Also Worth A Look"];
+  app.innerHTML = `
+    <div class="qcount">Your Matches</div>
+    <h2 class="q">Here's what we found for you</h2>
+    ${ranked.map((r,i)=>`
+      <div class="result">
+        <span class="rank">${labels[i]}</span>
+        <h3>${r.t.n}</h3>
+        <p class="why">${r.t.b}</p>
+        <a href="${r.t.u}" target="_blank" rel="noopener">Open ${r.t.n} — Free</a>
+        <div class="matchscore">${Math.max(55, Math.round(r.sc/max*100))}% match based on your answers</div>
+      </div>`).join('')}
+    <button class="again" onclick="start()">↻ Start Over</button>`;
+}
+
+start();
+</script>
+</body>
+</html>
