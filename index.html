@@ -184,7 +184,7 @@ function score(t){
 }
 
 function showResults(app){
-  const ranked = TOOLS.map(t=>({t, sc:score(t)})).sort((a,b)=>b.sc-a.sc).slice(0,3);
+  const ranked = TOOLS.map((t,idx)=>({t, sc:score(t) + (TOOLS.length-idx)*0.001})).sort((a,b)=>b.sc-a.sc).slice(0,3);
   const max = ranked[0].sc;
   const labels = ["Perfect Match","Great Fit","Also Worth A Look"];
   app.innerHTML = `
